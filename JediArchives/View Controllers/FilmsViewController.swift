@@ -65,5 +65,22 @@ extension FilmsViewController {
 extension FilmsViewController {
 
   func loadFilms() {
+    let query = AllFilmsQuery()
+    Apollo.shared.client.fetch(query: query) { results, error in
+      
+      if let films = results?.data?.allFilms?.films?.compactMap({$0}) {
+        
+        let models = films.map(RefItem.init)
+        
+        let sections: [Section] = [
+          .references(title: NSLocalizedString("Films", comment: ""), models: models)
+        ]
+        
+        self.dataSource.sections = sections
+        self.tableView.reloadData()
+      } else if let error = error {
+        print("Error loading data \(error)")
+      }
+    }
   }
 }

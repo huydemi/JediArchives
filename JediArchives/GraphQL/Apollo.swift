@@ -26,4 +26,19 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
+import Apollo
 
+class Apollo {
+  
+  // declare a static instance of the Apollo wrapper class to expose it as a singleton.
+  static let shared = Apollo()
+  // declare a variable to house an instance of ApolloClient which is the class through which you’ll interact with GraphQL.
+
+  let client: ApolloClient
+  
+  init() {
+    // initialize the ApolloClient instance
+    client = ApolloClient(url: URL(string: "http://localhost:8080")!)
+  }
+  
+}

@@ -259,7 +259,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which apollo-codegen >/dev/null; then\n\nAPOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\nif [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\necho \"warning: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\nexit 0\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}/GraphQL\"\n$APOLLO_FRAMEWORK_PATH/check-and-run-apollo-codegen.sh generate \\\n$(find . -name '*.graphql') \\\n--schema schema.json \\\n--output Generated/GraphQLAPI.swift\nelse\necho \"Skipping Apollo code generation\"\nfi";
+			shellScript = "# some how, xcode don't recognize apollo-codegen under /bin/sh on my PC. Below trick make it work since apollo-codegen is recognized under bash.\nsource ~/.bash_profile\n\nif which apollo-codegen >/dev/null; then\n\n  APOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\n  if [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\n    echo \"warning: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\n    exit 0\n  fi\n\n  cd \"${SRCROOT}/${TARGET_NAME}/GraphQL\"\n  $APOLLO_FRAMEWORK_PATH/check-and-run-apollo-codegen.sh generate \\\n    $(find . -name '*.graphql') \\\n    --schema schema.json \\\n    --output Generated/GraphQLAPI.swift\nelse\n  echo \"Skipping Apollo code generation\"\nfi";
 		};
 		BEE9B457F9BFF31229364CFB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

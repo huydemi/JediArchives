@@ -1,0 +1,12 @@
+query AllFilms {
+# defines the top level query collection from which you’re requesting data
+  allFilms {
+    # request the films attribute, which will include a list of actual Film objects
+    films {
+      # define the attributes you want to request from each Film object
+      id
+      title
+      releaseDate
+    }
+  }
+}
