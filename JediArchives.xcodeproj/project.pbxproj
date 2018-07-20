@@ -165,6 +165,7 @@
 			buildConfigurationList = 01BBAAA01FFC70B0008CEF3F /* Build configuration list for PBXNativeTarget "JediArchives" */;
 			buildPhases = (
 				139264979AE5C5F55DF8E633 /* [CP] Check Pods Manifest.lock */,
+				6B0417BA21024019009B7F54 /* Apollo GraphQL */,
 				01BBAA8A1FFC70B0008CEF3F /* Sources */,
 				01BBAA8B1FFC70B0008CEF3F /* Frameworks */,
 				01BBAA8C1FFC70B0008CEF3F /* Resources */,
@@ -245,6 +246,20 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		6B0417BA21024019009B7F54 /* Apollo GraphQL */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Apollo GraphQL";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which apollo-codegen >/dev/null; then\n\nAPOLLO_FRAMEWORK_PATH=\"$(eval find $FRAMEWORK_SEARCH_PATHS -name \"Apollo.framework\" -maxdepth 1)\"\n\nif [ -z \"$APOLLO_FRAMEWORK_PATH\" ]; then\necho \"warning: Couldn't find Apollo.framework in FRAMEWORK_SEARCH_PATHS; make sure to add the framework to your project.\"\nexit 0\nfi\n\ncd \"${SRCROOT}/${TARGET_NAME}/GraphQL\"\n$APOLLO_FRAMEWORK_PATH/check-and-run-apollo-codegen.sh generate \\\n$(find . -name '*.graphql') \\\n--schema schema.json \\\n--output Generated/GraphQLAPI.swift\nelse\necho \"Skipping Apollo code generation\"\nfi";
 		};
 		BEE9B457F9BFF31229364CFB /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
