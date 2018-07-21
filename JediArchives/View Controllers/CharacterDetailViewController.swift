@@ -73,5 +73,46 @@ extension CharacterDetailViewController {
 extension CharacterDetailViewController {
 
   func loadCharacter() {
+    
+    let query = CharacterDetailQuery(id: characterID)
+    Apollo.shared.client.fetch(query: query) { (result, error) in
+      
+      if let character = result?.data?.person {
+        self.navigationItem.title = character.name ?? ""
+        
+        let infoItems: [InfoItem] = [
+          InfoItem(label: NSLocalizedString("Name", comment: ""),
+                   value: character.name ?? "NA"),
+          InfoItem(label: NSLocalizedString("Birth Year", comment: ""),
+                   value: character.birthYear ?? "NA"),
+          InfoItem(label: NSLocalizedString("Eye Color", comment: ""),
+                   value: character.eyeColor ?? "NA"),
+          InfoItem(label: NSLocalizedString("Gender", comment: ""),
+                   value: character.gender ?? "NA"),
+          InfoItem(label: NSLocalizedString("Hair Color", comment: ""),
+                   value: character.hairColor ?? "NA"),
+          InfoItem(label: NSLocalizedString("Skin Color", comment: ""),
+                   value: character.skinColor ?? "NA"),
+          InfoItem(label: NSLocalizedString("Home World", comment: ""),
+                   value: character.homeworld?.name ?? "NA")
+        ]
+        
+        var sections: [Section] = [
+          .info(title: NSLocalizedString("Info", comment: ""), models: infoItems)
+        ]
+        
+        let filmItems = character.filmConnection?.films?.compactMap({$0})
+          .map({RefItem(film: $0.fragments.listFilmFragment)})
+        if let filmItems = filmItems, filmItems.count > 0 {
+          sections.append(.references(title: NSLocalizedString("Appears In", comment: ""),
+                                      models: filmItems))
+        }
+        
+        self.dataSource.sections = sections
+        self.tableView.reloadData()
+      } else if let error = error {
+        print("Error loading data \(error)")
+      }
+    }
   }
 }

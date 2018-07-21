@@ -1,12 +1,13 @@
+fragment ListFilmFragment on Film {
+  id
+  title
+  releaseDate
+}
+
 query AllFilms {
-# defines the top level query collection from which you’re requesting data
   allFilms {
-    # request the films attribute, which will include a list of actual Film objects
     films {
-      # define the attributes you want to request from each Film object
-      id
-      title
-      releaseDate
+      ...ListFilmFragment
     }
   }
 }
@@ -21,6 +22,25 @@ query FilmDetail($id: ID) {
       characters {
         id
         name
+      }
+    }
+  }
+}
+
+query CharacterDetail($id: ID) {
+  person(id: $id) {
+    name
+    birthYear
+    eyeColor
+    gender
+    hairColor
+    skinColor
+    homeworld {
+      name
+    }
+    filmConnection(first: 10) {
+      films {
+        ...ListFilmFragment
       }
     }
   }

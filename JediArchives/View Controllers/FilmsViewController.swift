@@ -68,7 +68,7 @@ extension FilmsViewController {
     let query = AllFilmsQuery()
     Apollo.shared.client.fetch(query: query) { results, error in
       
-      if let films = results?.data?.allFilms?.films?.compactMap({$0}) {
+      if let films = results?.data?.allFilms?.films?.compactMap({$0}).map({$0.fragments.listFilmFragment}) {
         
         let models = films.map(RefItem.init)
         
