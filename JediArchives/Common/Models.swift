@@ -39,6 +39,12 @@ struct RefItem: BaseCellViewable {
     label = film.title ?? ""
     value = film.releaseDate ?? ""
   }
+  
+  init(character: FilmDetailQuery.Data.Film.CharacterConnection.Character) {
+    id = character.id
+    label = character.name ?? ""
+    value = nil
+  }
 }
 
 struct InfoItem: BaseCellViewable {

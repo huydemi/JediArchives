@@ -10,3 +10,18 @@ query AllFilms {
     }
   }
 }
+
+query FilmDetail($id: ID) {
+  film(id: $id) {
+    title
+    episodeID
+    releaseDate
+    director
+    characterConnection(first: 10) {
+      characters {
+        id
+        name
+      }
+    }
+  }
+}

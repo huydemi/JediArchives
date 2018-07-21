@@ -73,5 +73,37 @@ extension FilmDetailViewController {
 extension FilmDetailViewController {
 
   func loadFilmDetail() {
+    
+    let query = FilmDetailQuery(id: filmID)
+    Apollo.shared.client.fetch(query: query) { result, error in
+      
+      if let film = result?.data?.film {
+        self.navigationItem.title = film.title ?? ""
+        
+        let infoItems: [InfoItem] = [
+          InfoItem(label: NSLocalizedString("Title", comment: ""), value: film.title ?? "NA"),
+          InfoItem(label: NSLocalizedString("Episode", comment: ""), value: "\(film.episodeId ?? 0)"),
+          InfoItem(label: NSLocalizedString("Released", comment: ""), value: film.releaseDate ?? "NA"),
+          InfoItem(label: NSLocalizedString("Director", comment: ""), value: film.director ?? "NA")
+        ]
+        
+        var sections: [Section] = [
+          .info(title: NSLocalizedString("Info", comment: ""), models: infoItems)
+        ]
+        
+        let characterItems = film.characterConnection?.characters?
+          .compactMap({$0}).map({RefItem(character: $0)})
+        
+        if let characterItems = characterItems, characterItems.count > 0 {
+          sections.append(.references(title: NSLocalizedString("Characters", comment: ""),
+                                      models: characterItems))
+        }
+        
+        self.dataSource.sections = sections
+        self.tableView.reloadData()
+      } else if let error = error {
+        print("Error loading data \(error)")
+      }
+    }
   }
 }
